@@ -1,7 +1,7 @@
 # app.py
 
 import streamlit as st
-import scikit-learn
+import sklearn
 import pickle
 import os
 
