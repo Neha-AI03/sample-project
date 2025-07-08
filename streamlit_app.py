@@ -1,12 +1,27 @@
 # app.py
 
 import streamlit as st
-import numpy as np
 import pickle
+import os
 
-# Load trained model
-with open("flood_model.pkl", "rb") as f:
-    model = pickle.load(f)
+# Load trained model safely
+MODEL_PATH = "flood_model.pkl"
+
+if os.path.exists(MODEL_PATH):
+    try:
+        with open(MODEL_PATH, "rb") as f:
+            model = pickle.load(f)
+    except ModuleNotFoundError as e:
+        st.error("⚠️ Required module missing for loading the model:")
+        st.code(str(e))
+        st.stop()
+    except Exception as e:
+        st.error("🚫 An unexpected error occurred while loading the model:")
+        st.code(str(e))
+        st.stop()
+else:
+    st.error("📂 Model file 'flood_model.pkl' not found. Please make sure it's uploaded.")
+    st.stop()
 
 # Page setup
 st.set_page_config(page_title="Smart Flood Alert System", layout="centered")
